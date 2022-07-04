@@ -10,10 +10,10 @@ localization{
 lat;
 lng;
 }
-sections[Sections.populate: id,name]
+sectors[Sector: id]
 }
 
-Section{
+Sector{
 name;
 image;
 hoursSun;
@@ -21,10 +21,10 @@ localization{
 lat;
 lng;
 }
-routes[Routers.populate: id, name, lenght, grade]
+routes[Route: id]
 }
 
-Routes{
+Rout{
 name;
 image;
 lenght;
@@ -32,10 +32,10 @@ grade;
 voteGrade([{id usuario, vote}porque son las votaciones de todos los usuarios)]
 isProyect
 isEnchain
-users[Users: id]
+users[User: id]
 }
 
-Users{
+User{
 name;
 image;
 email;
