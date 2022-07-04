@@ -25,7 +25,7 @@ jobs:
             - name: Ensure node_modules is ignored by Git
               uses: dkershner6/gitignore-parser@v1
               with:
-                  must_deny: 'node_modules'
+                  must_deny: 'node_modules/'
 
             - name: Install modules
               run: npm ci
