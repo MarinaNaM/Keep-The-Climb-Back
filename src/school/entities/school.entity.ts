@@ -13,7 +13,7 @@ export interface iSchool {
     sectors: iRelationField;
 }
 
-export const SchoolSchema = new Schema({
+export const schoolSchema = new Schema({
     name: String,
     img: String,
     period: String,
@@ -21,5 +21,5 @@ export const SchoolSchema = new Schema({
         lat: Number,
         lng: Number,
     },
-    sectors: { type: SchemaTypes.ObjectId, ref: 'Section' },
+    sectors: { type: SchemaTypes.ObjectId, ref: 'Sector' },
 });
