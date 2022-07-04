@@ -21,5 +21,5 @@ export const schoolSchema = new Schema({
         lat: Number,
         lng: Number,
     },
-    sectors: { type: SchemaTypes.ObjectId, ref: 'Sector' },
+    sectors: [{ type: SchemaTypes.ObjectId, ref: 'Sector' }],
 });
