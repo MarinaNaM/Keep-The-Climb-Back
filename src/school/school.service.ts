@@ -17,12 +17,22 @@ export class SchoolService {
     }
 
     async findAll() {
-        const result = await this.School.find().populate('sectors');
+        const result = await this.School.find();
         return result;
     }
 
     async findOne(id: string) {
-        const result = await this.School.findById(id);
+        const populate = {
+            path: 'sectors',
+            select: {
+                name: 1,
+                hoursSun: 1,
+            },
+            populate: {
+                path: 'routes',
+            },
+        };
+        const result = await this.School.findById(id).populate(populate);
         return result;
     }
 
