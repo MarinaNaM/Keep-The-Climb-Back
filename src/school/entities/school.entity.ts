@@ -10,7 +10,7 @@ export interface iSchool {
         lat: number;
         lng: number;
     };
-    sectors: iRelationField;
+    sectors: Array<iRelationField>;
 }
 
 export const schoolSchema = new Schema({

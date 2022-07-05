@@ -3,6 +3,7 @@ import { SchoolService } from './school.service';
 import { SchoolController } from './school.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { schoolSchema } from './entities/school.entity';
+import { sectorSchema } from '../sector/entities/sector.entity';
 
 @Module({
     imports: [
