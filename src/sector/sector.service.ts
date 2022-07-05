@@ -12,6 +12,8 @@ export class SectorService {
     ) {}
 
     async create(createSectorDto: CreateSectorDto) {
+        console.log('algo');
+
         const newSector = await this.Sector.create(createSectorDto);
         return newSector;
     }

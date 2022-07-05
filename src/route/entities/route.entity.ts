@@ -6,22 +6,20 @@ export interface iRoute {
     name: string;
     img: string;
     length: number;
-    grade: number;
+    grade: string;
     voteGrade: [
         {
             user: iRelationFieldVote;
             vote: string;
         },
     ];
-    isProject: boolean;
-    isEnchain: boolean;
 }
 
 export const routeSchema = new Schema({
     name: String,
     img: String,
     lenght: Number,
-    grade: Number,
+    grade: String,
     voteGrade: [
         {
             type: Types.ObjectId,
@@ -31,6 +29,4 @@ export const routeSchema = new Schema({
             },
         },
     ],
-    isProyect: Boolean,
-    isEnchain: Boolean,
 });

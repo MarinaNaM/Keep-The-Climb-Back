@@ -17,7 +17,7 @@ export class SchoolService {
     }
 
     async findAll() {
-        const result = await this.School.find();
+        const result = await this.School.find().populate('sectors');
         return result;
     }
 

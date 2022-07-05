@@ -1,5 +1,4 @@
 import { Schema, SchemaTypes, Types } from 'mongoose';
-import { iRelationField } from '../../interfaces/relation-field';
 
 export interface iUser {
     _id?: Types.ObjectId;
@@ -11,7 +10,7 @@ export interface iUser {
         community?: string;
         province?: string;
     };
-    routes: Array<iRelationField>;
+    routes: Array<{ route: string; isProject: boolean; isEnchain: boolean }>;
 }
 
 export const userSchema = new Schema({
@@ -42,5 +41,11 @@ export const userSchema = new Schema({
         community: String,
         province: String,
     },
-    routes: [{ type: SchemaTypes.ObjectId, ref: 'Route' }],
+    routes: [
+        {
+            route: { type: SchemaTypes.ObjectId, ref: 'Route' },
+            isProject: Boolean,
+            isEnchain: Boolean,
+        },
+    ],
 });

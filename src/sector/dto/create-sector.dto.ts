@@ -6,5 +6,5 @@ export class CreateSectorDto {
         lat: number;
         lng: number;
     };
-    routes: string;
+    routes: Array<string>;
 }

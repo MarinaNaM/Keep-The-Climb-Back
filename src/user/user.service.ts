@@ -23,12 +23,12 @@ export class UserService {
     async create(createUserDto: CreateUserDto) {
         const newUser = await this.User.create({
             ...createUserDto,
-            passwd: this.bcrypt.encrypt(createUserDto.psw),
+            psw: this.bcrypt.encrypt(createUserDto.psw),
         });
-        const token = this.auth.createToken(newUser.id);
+        // const token = this.auth.createToken(newUser.id); es para el usuario que se logea
         return {
             userData: newUser,
-            token,
+            // token,
         };
     }
 
