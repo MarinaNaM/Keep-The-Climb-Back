@@ -74,7 +74,13 @@ export class UserService {
     }
 
     async findOne(id: string) {
-        const user = await this.User.findById(id);
+        const populate = {
+            path: 'routes',
+            populate: {
+                path: 'route',
+            },
+        };
+        const user = await this.User.findById(id).populate(populate);
         return user;
     }
 
