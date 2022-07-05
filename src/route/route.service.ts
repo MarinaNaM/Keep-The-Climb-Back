@@ -1,13 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { iUser } from '../user/entities/user.entity';
 import { CreateRouteDto } from './dto/create-route.dto';
 import { UpdateRouteDto } from './dto/update-route.dto';
 import { iRoute } from './entities/route.entity';
 
 @Injectable()
 export class RouteService {
-    constructor(@InjectModel('Route') private readonly Route: Model<iRoute>) {}
+    constructor(
+        @InjectModel('Route') private readonly Route: Model<iRoute>,
+        @InjectModel('User') private readonly User: Model<iUser>,
+    ) {}
 
     async create(createRouteDto: CreateRouteDto) {
         const newRoute = await this.Route.create(createRouteDto);
@@ -34,5 +38,21 @@ export class RouteService {
         const route = await this.Route.findById(id);
         const deleteRoute = await route.delete();
         return deleteRoute;
+    }
+
+    async updateGrade(idUser: string, idRoute: string, voteGrade: number) {
+        const findUser = await this.User.findById(idUser);
+        if (!findUser)
+            throw new NotFoundException('El usuario no ha sido encontrado');
+        const newVote = { user: idUser, vote: voteGrade };
+        const route = await this.Route.findById(idRoute);
+        const voted = route.voteGrade.find((item) => item.user === idUser);
+        if (!voted) {
+            route.voteGrade.push(newVote);
+            route.save();
+            return newVote;
+        } else {
+            return {};
+        }
     }
 }
