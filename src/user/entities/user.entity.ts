@@ -6,7 +6,7 @@ export interface iUser {
     psw: string;
     img?: string;
     email: string;
-    adress: {
+    address: {
         community?: string;
         province?: string;
     };
@@ -37,15 +37,15 @@ export const userSchema = new Schema({
         required: [true, 'El email es obligatorio'],
         unique: [true, 'Este email ya está registrado'],
     },
-    adress: {
+    address: {
         community: String,
         province: String,
     },
     routes: [
         {
             route: { type: SchemaTypes.ObjectId, ref: 'Route' },
-            isProject: Boolean,
-            isEnchain: Boolean,
+            isProject: { type: Boolean, default: false },
+            isEnchain: { type: Boolean, default: false },
         },
     ],
 });
