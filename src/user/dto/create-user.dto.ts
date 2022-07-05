@@ -7,5 +7,5 @@ export class CreateUserDto {
         community?: string;
         province?: string;
     };
-    routes: Array<string>;
+    routes: [{ route: string; isProject: boolean; isEnchain: boolean }];
 }

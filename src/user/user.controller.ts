@@ -1,34 +1,58 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+    Controller,
+    Get,
+    Post,
+    Body,
+    Patch,
+    Param,
+    Delete,
+    Headers,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+    constructor(private readonly userService: UserService) {}
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
-  }
+    @Post()
+    async create(@Body() createUserDto: CreateUserDto) {
+        return await this.userService.create(createUserDto);
+    }
 
-  @Get()
-  findAll() {
-    return this.userService.findAll();
-  }
+    @Post('login')
+    async login(
+        @Body() loginData: { email: string; passwd: string },
+        @Headers('Authorization') token: string,
+    ) {
+        if (token) {
+            return await this.userService.loginWithToken(token);
+        } else {
+            return await this.userService.login(loginData);
+        }
+    }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
-  }
+    @Get()
+    async findAll() {
+        return await this.userService.findAll();
+    }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
-  }
+    @Get(':id')
+    async findOne(@Param('id') id: string) {
+        return await this.userService.findOne(id);
+    }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
-  }
+    @Patch(':id')
+    async update(
+        @Param('id') id: string,
+        @Body() updateUserDto: UpdateUserDto,
+    ) {
+        return await this.userService.update(id, updateUserDto);
+    }
+
+    @Delete(':id')
+    async remove(@Param('id') id: string) {
+        return await this.userService.remove(id);
+    }
 }

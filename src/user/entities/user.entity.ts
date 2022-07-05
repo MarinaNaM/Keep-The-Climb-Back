@@ -1,5 +1,4 @@
 import { Schema, SchemaTypes, Types } from 'mongoose';
-import { iRelationField } from '../../interfaces/relation-field';
 
 export interface iUser {
     _id?: Types.ObjectId;
@@ -7,11 +6,11 @@ export interface iUser {
     psw: string;
     img?: string;
     email: string;
-    adress: {
+    address: {
         community?: string;
         province?: string;
     };
-    routes: Array<iRelationField>;
+    routes: Array<{ route: string; isProject: boolean; isEnchain: boolean }>;
 }
 
 export const userSchema = new Schema({
@@ -38,9 +37,15 @@ export const userSchema = new Schema({
         required: [true, 'El email es obligatorio'],
         unique: [true, 'Este email ya está registrado'],
     },
-    adress: {
+    address: {
         community: String,
         province: String,
     },
-    routes: [{ type: SchemaTypes.ObjectId, ref: 'Route' }],
+    routes: [
+        {
+            route: { type: SchemaTypes.ObjectId, ref: 'Route' },
+            isProject: { type: Boolean, default: false },
+            isEnchain: { type: Boolean, default: false },
+        },
+    ],
 });
