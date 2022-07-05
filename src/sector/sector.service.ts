@@ -24,7 +24,7 @@ export class SectorService {
     }
 
     async findOne(id: string) {
-        const result = await this.Sector.findById(id);
+        const result = await this.Sector.findById(id).populate('routes');
         return result;
     }
 
