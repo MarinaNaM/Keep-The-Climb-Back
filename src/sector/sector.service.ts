@@ -1,26 +1,40 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { CreateSectorDto } from './dto/create-sector.dto';
 import { UpdateSectorDto } from './dto/update-sector.dto';
+import { iSector } from './entities/sector.entity';
 
 @Injectable()
 export class SectorService {
-  create(createSectorDto: CreateSectorDto) {
-    return 'This action adds a new sector';
-  }
+    constructor(
+        @InjectModel('Sector') private readonly Sector: Model<iSector>,
+    ) {}
 
-  findAll() {
-    return `This action returns all sector`;
-  }
+    async create(createSectorDto: CreateSectorDto) {
+        const newSector = await this.Sector.create(createSectorDto);
+        return newSector;
+    }
 
-  findOne(id: number) {
-    return `This action returns a #${id} sector`;
-  }
+    async findAll() {
+        const result = await this.Sector.find();
+        return result;
+    }
 
-  update(id: number, updateSectorDto: UpdateSectorDto) {
-    return `This action updates a #${id} sector`;
-  }
+    async findOne(id: string) {
+        const result = await this.Sector.findById(id);
+        return result;
+    }
 
-  remove(id: number) {
-    return `This action removes a #${id} sector`;
-  }
+    async update(id: string, updateSectorDto: UpdateSectorDto) {
+        return await this.Sector.findByIdAndUpdate(id, updateSectorDto, {
+            new: true,
+        });
+    }
+
+    async remove(id: string) {
+        const sector = await this.Sector.findById(id);
+        const deleteSector = await sector.delete();
+        return deleteSector;
+    }
 }

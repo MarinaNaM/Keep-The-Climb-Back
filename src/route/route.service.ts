@@ -1,26 +1,38 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { CreateRouteDto } from './dto/create-route.dto';
 import { UpdateRouteDto } from './dto/update-route.dto';
+import { iRoute } from './entities/route.entity';
 
 @Injectable()
 export class RouteService {
-  create(createRouteDto: CreateRouteDto) {
-    return 'This action adds a new route';
-  }
+    constructor(@InjectModel('Route') private readonly Route: Model<iRoute>) {}
 
-  findAll() {
-    return `This action returns all route`;
-  }
+    async create(createRouteDto: CreateRouteDto) {
+        const newRoute = await this.Route.create(createRouteDto);
+        return newRoute;
+    }
 
-  findOne(id: number) {
-    return `This action returns a #${id} route`;
-  }
+    async findAll() {
+        const result = await this.Route.find();
+        return result;
+    }
 
-  update(id: number, updateRouteDto: UpdateRouteDto) {
-    return `This action updates a #${id} route`;
-  }
+    async findOne(id: string) {
+        const result = await this.Route.findById(id);
+        return result;
+    }
 
-  remove(id: number) {
-    return `This action removes a #${id} route`;
-  }
+    async update(id: string, updateRouteDto: UpdateRouteDto) {
+        return await this.Route.findByIdAndUpdate(id, updateRouteDto, {
+            new: true,
+        });
+    }
+
+    async remove(id: string) {
+        const route = await this.Route.findById(id);
+        const deleteRoute = await route.delete();
+        return deleteRoute;
+    }
 }
