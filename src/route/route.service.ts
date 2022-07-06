@@ -45,14 +45,17 @@ export class RouteService {
     }
 
     async updateGrade(idUser: string, idRoute: string, voteGrade: number) {
-        const findUser = await this.User.findById(idUser);
-        if (!findUser)
-            throw new NotFoundException('El usuario no ha sido encontrado');
         const route = await this.Route.findById(idRoute);
         if (!route) throw new NotFoundException('Route not found');
 
+        const findUser = await this.User.findById(idUser);
+        if (!findUser)
+            throw new NotFoundException('El usuario no ha sido encontrado');
+
         const newVote = { user: idUser, vote: voteGrade };
-        const voted = route.voteGrade.some((item) => item.user === idUser);
+        const voted = route.voteGrade.some(
+            (item) => item.user.toString() === idUser,
+        );
 
         if (!voted) {
             route.voteGrade.push(newVote);
