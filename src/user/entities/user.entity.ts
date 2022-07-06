@@ -1,5 +1,6 @@
-import { Schema, SchemaTypes, Types } from 'mongoose';
+/* istanbul ignore file */
 
+import { Schema, SchemaTypes, Types } from 'mongoose';
 export interface iUser {
     _id?: Types.ObjectId;
     name: string;

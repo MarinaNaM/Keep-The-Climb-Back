@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import { Schema, Types } from 'mongoose';
 
 export interface iRoute {

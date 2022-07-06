@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import { Schema, SchemaTypes, Types } from 'mongoose';
 import { iRelationField } from '../../interfaces/relation-field';
 
