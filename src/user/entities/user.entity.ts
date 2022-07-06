@@ -1,4 +1,9 @@
 import { Schema, SchemaTypes, Types } from 'mongoose';
+
+export const isEmail = (email: string) => {
+    const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    return regex.test(email);
+};
 export interface iUser {
     _id?: Types.ObjectId;
     name: string;
@@ -34,6 +39,7 @@ export const userSchema = new Schema({
     email: {
         type: String,
         required: [true, 'El email es obligatorio'],
+        validate: [isEmail, 'Provider email is not valid'],
         unique: [true, 'Este email ya está registrado'],
     },
     address: {
