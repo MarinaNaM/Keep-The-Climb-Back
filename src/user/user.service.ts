@@ -25,10 +25,10 @@ export class UserService {
             ...createUserDto,
             psw: this.bcrypt.encrypt(createUserDto.psw),
         });
-        // const token = this.auth.createToken(newUser.id); es para el usuario que se logea
+        const token = this.auth.createToken(newUser.id);
         return {
-            userData: newUser,
-            // token,
+            user: newUser,
+            token,
         };
     }
 

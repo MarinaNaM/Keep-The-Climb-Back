@@ -103,7 +103,7 @@ describe('UserService', () => {
     describe('When calling service.create', () => {
         test('Then it should return the saved user', async () => {
             const result = await service.create(mockUser);
-            expect(result).toEqual({ userData: mockUser });
+            expect(result).toEqual(mockResponse);
         });
     });
 
