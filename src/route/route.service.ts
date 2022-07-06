@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+    ForbiddenException,
+    Injectable,
+    NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { iUser } from '../user/entities/user.entity';
@@ -44,15 +48,18 @@ export class RouteService {
         const findUser = await this.User.findById(idUser);
         if (!findUser)
             throw new NotFoundException('El usuario no ha sido encontrado');
-        const newVote = { user: idUser, vote: voteGrade };
         const route = await this.Route.findById(idRoute);
-        const voted = route.voteGrade.find((item) => item.user === idUser);
+        if (!route) throw new NotFoundException('Route not found');
+
+        const newVote = { user: idUser, vote: voteGrade };
+        const voted = route.voteGrade.some((item) => item.user === idUser);
+
         if (!voted) {
             route.voteGrade.push(newVote);
             route.save();
             return newVote;
         } else {
-            return {};
+            throw new ForbiddenException('You already voted this route');
         }
     }
 }
