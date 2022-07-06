@@ -32,12 +32,12 @@ export class UserService {
         };
     }
 
-    async login(loginData: { email: string; passwd: string }) {
+    async login(loginData: { email: string; psw: string }) {
         const user = await this.User.findOne({
             email: loginData.email,
         });
         if (user === null) throw new NotFoundException('User does not exist.');
-        if (!this.bcrypt.compare(loginData.passwd, user.psw))
+        if (!this.bcrypt.compare(loginData.psw, user.psw))
             throw new UnauthorizedException('Password or email iconrrect.');
         const token = this.auth.createToken(user.id);
         return {
