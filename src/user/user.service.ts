@@ -47,25 +47,17 @@ export class UserService {
     }
 
     async loginWithToken(token: string) {
-        try {
-            const tokenData = this.auth.decodedToken(
-                token.substring(7),
-            ) as JwtPayload;
-            if (typeof tokenData === 'string')
-                throw new UnauthorizedException('');
-            const user = await (
-                await this.User.findById(tokenData.id)
-            ).populate('tasks');
-            if (user === null)
-                throw new NotFoundException('User does not exist');
-            const newToken = this.auth.createToken(user.id);
-            return {
-                user,
-                token: newToken,
-            };
-        } catch (ex) {
-            throw new UnauthorizedException('Session expired');
-        }
+        const tokenData = this.auth.decodedToken(
+            token.substring(7),
+        ) as JwtPayload;
+        if (typeof tokenData === 'string') throw new UnauthorizedException('');
+        const user = await await this.User.findById(tokenData.id); //no sé si tendré que popular algo porque no sé si este método me sirve para algo
+        if (user === null) throw new NotFoundException('User does not exist');
+        const newToken = this.auth.createToken(user.id);
+        return {
+            user,
+            token: newToken,
+        };
     }
 
     async findAll() {
