@@ -3,7 +3,7 @@ export class CreateUserDto {
     psw: string;
     img?: string;
     email: string;
-    adress: {
+    address: {
         community?: string;
         province?: string;
     };
