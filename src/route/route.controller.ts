@@ -30,6 +30,13 @@ export class RouteController {
         return this.routeService.findOne(id);
     }
 
+    @Patch('/voteRoute/:id')
+    updateVote(
+        @Param('id') id: string,
+        @Body() body: { user: string; vote: number },
+    ) {
+        return this.routeService.updateGrade(body.user, id, body.vote);
+    }
     @Patch(':id')
     update(@Param('id') id: string, @Body() updateRouteDto: UpdateRouteDto) {
         return this.routeService.update(id, updateRouteDto);

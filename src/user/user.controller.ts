@@ -23,7 +23,7 @@ export class UserController {
 
     @Post('login')
     async login(
-        @Body() loginData: { email: string; passwd: string },
+        @Body() loginData: { email: string; psw: string },
         @Headers('Authorization') token: string,
     ) {
         if (token) {

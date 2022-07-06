@@ -1,15 +1,11 @@
 export class CreateRouteDto {
     name: string;
-    img: string;
     length: number;
-    grade: number;
+    grade: string;
     voteGrade: [
         {
-            idUsuario: string;
-            vote: string;
+            user: string;
+            vote: number;
         },
     ];
-    isProject: boolean;
-    isEnchain: boolean;
-    users: string;
 }
