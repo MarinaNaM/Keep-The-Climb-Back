@@ -98,9 +98,7 @@ describe('SectorService', () => {
     });
     describe('When calling service.remove', () => {
         test('Then it should return remove sector', async () => {
-            mockSectorModel.findById.mockResolvedValueOnce({
-                delete: jest.fn().mockResolvedValue(mockSector),
-            });
+            mockSectorModel.findByIdAndDelete.mockResolvedValue(mockSector);
             const result = await service.remove('');
             expect(result).toEqual(mockSector);
         });

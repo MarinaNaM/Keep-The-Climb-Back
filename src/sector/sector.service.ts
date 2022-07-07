@@ -33,8 +33,6 @@ export class SectorService {
     }
 
     async remove(id: string) {
-        const sector = await this.Sector.findById(id);
-        const deleteSector = await sector.delete();
-        return deleteSector;
+        return await this.Sector.findByIdAndDelete(id);
     }
 }
