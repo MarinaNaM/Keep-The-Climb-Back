@@ -41,7 +41,7 @@ describe('RouteController', () => {
                 voteGrade: [
                     {
                         user: '123456789012345678901234',
-                        vote: 2,
+                        vote: '2',
                     },
                 ],
             });
@@ -62,7 +62,7 @@ describe('RouteController', () => {
     });
     describe('When calling controller.updateVoted', () => {
         test('Then service.update should be called', () => {
-            controller.updateVote('', { user: '', vote: 2 });
+            controller.updateVote('', { user: '', vote: '2' });
             expect(service.updateGrade).toHaveBeenCalled();
         });
     });

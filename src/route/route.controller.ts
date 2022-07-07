@@ -33,7 +33,7 @@ export class RouteController {
     @Patch('/voteRoute/:id')
     updateVote(
         @Param('id') id: string,
-        @Body() body: { user: string; vote: number },
+        @Body() body: { user: string; vote: string },
     ) {
         return this.routeService.updateGrade(body.user, id, body.vote);
     }
