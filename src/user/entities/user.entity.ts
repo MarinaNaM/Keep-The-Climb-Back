@@ -14,6 +14,7 @@ export interface iUser {
         community?: string;
         province?: string;
     };
+    role: 'admin' | 'user';
     routes: Array<{ route: string; isProject: boolean; isEnchain: boolean }>;
 }
 
@@ -45,6 +46,12 @@ export const userSchema = new Schema({
     address: {
         community: String,
         province: String,
+    },
+    role: {
+        type: String,
+        enum: ['admin', 'user'],
+        required: [true, 'El rol es obligatorio'],
+        default: 'user',
     },
     routes: [
         {
