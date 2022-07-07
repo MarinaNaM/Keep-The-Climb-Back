@@ -5,7 +5,6 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { NextFunction, Request, Response } from 'express';
-import { JsonWebTokenError } from 'jsonwebtoken';
 import { Model } from 'mongoose';
 import { iUser } from '../user/entities/user.entity';
 import { AuthService } from '../auth/auth.service';
@@ -25,7 +24,7 @@ export class RoleMiddleware implements NestMiddleware {
         const userId = tokenData.id as string;
         const user = await this.User.findById(userId);
         if (user.role === 'user')
-            throw new UnauthorizedException('You are not an administrator');
+            throw new UnauthorizedException('You have not access to this page');
         next();
     }
 }
