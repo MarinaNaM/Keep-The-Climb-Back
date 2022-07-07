@@ -95,11 +95,9 @@ describe('RouteService', () => {
             const result = await service.findOne('123456789012345678901234');
             expect(result).toEqual(mockRoute);
         });
-        test('And the route id is not valid', async () => {
-            mockRouteModel.findById.mockResolvedValue(mockRoute);
-            expect(
-                async () => await service.findOne('12345678901234567890'),
-            ).rejects.toThrow();
+        test('And id is not valid, then should throw an error', async () => {
+            mockRouteModel.findById.mockResolvedValue(null);
+            expect(async () => await service.findOne('')).rejects.toThrow();
         });
     });
     describe('When calling service.findByIdAndUpdate', () => {
@@ -107,14 +105,22 @@ describe('RouteService', () => {
             const result = await service.update('', mockRoute);
             expect(result).toEqual(mockRoute);
         });
+        test('And the id is not valid, then should throw an exception', async () => {
+            mockRouteModel.findByIdAndUpdate.mockResolvedValue(null);
+            expect(
+                async () => await service.update('', mockRoute),
+            ).rejects.toThrow();
+        });
     });
     describe('When calling service.remove', () => {
         test('Then it should return remove route', async () => {
-            mockRouteModel.findById.mockResolvedValueOnce({
-                delete: jest.fn().mockResolvedValue(mockRoute),
-            });
+            mockRouteModel.findByIdAndDelete.mockResolvedValue(mockRoute);
             const result = await service.remove('');
             expect(result).toEqual(mockRoute);
+        });
+        test('And id is not valid, then should throw an exception', async () => {
+            mockRouteModel.findByIdAndDelete.mockResolvedValue(null);
+            expect(async () => await service.remove('')).rejects.toThrow();
         });
     });
     describe('When calling service.updateGrade', () => {

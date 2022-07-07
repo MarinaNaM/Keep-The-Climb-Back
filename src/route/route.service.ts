@@ -1,5 +1,4 @@
 import {
-    BadRequestException,
     ForbiddenException,
     Injectable,
     NotAcceptableException,
@@ -30,25 +29,23 @@ export class RouteService {
     }
 
     async findOne(id: string) {
-        try {
-            if (id.length !== 24) throw new BadRequestException('ID not valid');
-            const result = await this.Route.findById(id);
-            return result;
-        } catch (error) {
-            throw new BadRequestException('Route not found');
-        }
+        const result = await this.Route.findById(id);
+        if (!result) throw new NotFoundException('Route not found');
+        return result;
     }
 
     async update(id: string, updateRouteDto: UpdateRouteDto) {
-        return await this.Route.findByIdAndUpdate(id, updateRouteDto, {
+        const result = await this.Route.findByIdAndUpdate(id, updateRouteDto, {
             new: true,
         });
+        if (!result) throw new NotFoundException('Route not found');
+        return result;
     }
 
     async remove(id: string) {
-        const route = await this.Route.findById(id);
-        const deleteRoute = await route.delete();
-        return deleteRoute;
+        const result = await this.Route.findByIdAndDelete(id);
+        if (!result) throw new NotFoundException('Route not found');
+        return result;
     }
 
     async updateGrade(idUser: string, idRoute: string, voteGrade: string) {
