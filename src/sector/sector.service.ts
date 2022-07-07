@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateSectorDto } from './dto/create-sector.dto';
@@ -22,17 +22,27 @@ export class SectorService {
     }
 
     async findOne(id: string) {
-        const result = await this.Sector.findById(id).populate('routes');
-        return result;
+        const findSector = await this.Sector.findById(id);
+        if (!findSector) throw new NotFoundException('Sector not found');
+        const sector = findSector.populate('routes');
+        return sector;
     }
 
     async update(id: string, updateSectorDto: UpdateSectorDto) {
-        return await this.Sector.findByIdAndUpdate(id, updateSectorDto, {
-            new: true,
-        });
+        const result = await this.Sector.findByIdAndUpdate(
+            id,
+            updateSectorDto,
+            {
+                new: true,
+            },
+        );
+        if (!result) throw new NotFoundException('Sector not found');
+        return result;
     }
 
     async remove(id: string) {
-        return await this.Sector.findByIdAndDelete(id);
+        const result = await this.Sector.findByIdAndDelete(id);
+        if (!result) throw new NotFoundException('Sector not found');
+        return result;
     }
 }
