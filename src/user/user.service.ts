@@ -77,6 +77,9 @@ export class UserService {
     }
 
     async update(id: string, updateUserDto: UpdateUserDto) {
+        if (updateUserDto.psw) {
+            updateUserDto.psw = this.bcrypt.encrypt(updateUserDto.psw);
+        }
         const updateUser = await this.User.findByIdAndUpdate(
             id,
             updateUserDto,
