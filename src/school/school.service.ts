@@ -32,16 +32,20 @@ export class SchoolService {
                 path: 'routes',
             },
         };
-        const result = await this.School.findById(id).populate(populate);
-        if (!result) throw new NotFoundException('School not found');
-
-        return result;
+        const findSchool = await this.School.findById(id);
+        if (!findSchool) throw new NotFoundException('School not found');
+        const school = findSchool.populate(populate);
+        return school;
     }
 
     async update(id: string, updateSchoolDto: UpdateSchoolDto) {
-        const result = this.School.findByIdAndUpdate(id, updateSchoolDto, {
-            new: true,
-        });
+        const result = await this.School.findByIdAndUpdate(
+            id,
+            updateSchoolDto,
+            {
+                new: true,
+            },
+        );
         if (!result) throw new NotFoundException('School not found');
         return result;
     }
