@@ -101,6 +101,15 @@ describe('UserService', () => {
         expect(service).toBeDefined();
     });
 
+    describe('When calling service.removeProfile', () => {
+        test('And the user does not exist, then should throw an exception', async () => {
+            mockUserModel.findById.mockResolvedValueOnce(null);
+            expect(async () => {
+                await service.removeProfile('token');
+            }).rejects.toThrow();
+        });
+    });
+
     describe('When calling service.create', () => {
         test('Then it should return the saved user', async () => {
             const result = await service.create(mockUser);
@@ -149,7 +158,7 @@ describe('UserService', () => {
         });
     });
 
-    describe('When calling service.loginWithToken with invalid o expired token', () => {
+    describe('When calling service.loginWithToken with invalid', () => {
         test('Then it should throw an unauthorized exception', async () => {
             mockAuth.decodedToken.mockReturnValueOnce('error');
             expect(async () => {
@@ -200,12 +209,19 @@ describe('UserService', () => {
     });
     describe('When calling service.removeProfile', () => {
         test('Then it should return remove user profile', async () => {
-            await service.loginWithToken('token');
             mockUserModel.findById.mockResolvedValueOnce({
                 delete: jest.fn().mockResolvedValue(mockUser),
             });
             const result = await service.removeProfile('');
             expect(result).toEqual(mockUser);
+        });
+    });
+    describe('When calling service.removeProfile', () => {
+        test('And the token is invalid, then should throw an exception', () => {
+            mockAuth.decodedToken.mockReturnValueOnce('error');
+            expect(async () => {
+                await service.removeProfile('token');
+            }).rejects.toThrow();
         });
     });
 });

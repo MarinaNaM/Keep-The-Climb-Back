@@ -5,7 +5,6 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { JwtPayload } from 'jsonwebtoken';
 import { BcryptService } from '../auth/bcrypt.service';
 import { AuthService } from '../auth/auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -47,9 +46,7 @@ export class UserService {
     }
 
     async loginWithToken(token: string) {
-        const tokenData = this.auth.decodedToken(
-            token.substring(7),
-        ) as JwtPayload;
+        const tokenData = this.auth.decodedToken(token.substring(7));
         if (typeof tokenData === 'string')
             throw new UnauthorizedException('Invalid token');
         const user = await this.User.findById(tokenData.id);
@@ -94,13 +91,11 @@ export class UserService {
     }
 
     async removeProfile(token: string) {
-        const tokenData = this.auth.decodedToken(
-            token.substring(7),
-        ) as JwtPayload;
+        const tokenData = this.auth.decodedToken(token.substring(7));
         if (typeof tokenData === 'string')
             throw new UnauthorizedException('Invalid token');
         const user = await this.User.findById(tokenData.id);
-        if (user === null) throw new NotFoundException('User does not exist');
+        if (!user) throw new NotFoundException('User does not exist');
         const deleteProfile = this.User.findByIdAndDelete(tokenData.id);
         return deleteProfile;
     }
