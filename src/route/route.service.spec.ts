@@ -13,7 +13,7 @@ describe('RouteService', () => {
         voteGrade: [
             {
                 user: '123456789012345678901234',
-                vote: 2,
+                vote: '2',
             },
         ],
     };
@@ -92,8 +92,12 @@ describe('RouteService', () => {
     describe('When calling service.findById', () => {
         test('Then it should return one route', async () => {
             mockRouteModel.findById.mockResolvedValue(mockRoute);
-            const result = await service.findOne('');
+            const result = await service.findOne('123456789012345678901234');
             expect(result).toEqual(mockRoute);
+        });
+        test('And id is not valid, then should throw an error', async () => {
+            mockRouteModel.findById.mockResolvedValue(null);
+            expect(async () => await service.findOne('')).rejects.toThrow();
         });
     });
     describe('When calling service.findByIdAndUpdate', () => {
@@ -101,45 +105,64 @@ describe('RouteService', () => {
             const result = await service.update('', mockRoute);
             expect(result).toEqual(mockRoute);
         });
+        test('And the id is not valid, then should throw an exception', async () => {
+            mockRouteModel.findByIdAndUpdate.mockResolvedValue(null);
+            expect(
+                async () => await service.update('', mockRoute),
+            ).rejects.toThrow();
+        });
     });
     describe('When calling service.remove', () => {
         test('Then it should return remove route', async () => {
-            mockRouteModel.findById.mockResolvedValueOnce({
-                delete: jest.fn().mockResolvedValue(mockRoute),
-            });
+            mockRouteModel.findByIdAndDelete.mockResolvedValue(mockRoute);
             const result = await service.remove('');
             expect(result).toEqual(mockRoute);
         });
+        test('And id is not valid, then should throw an exception', async () => {
+            mockRouteModel.findByIdAndDelete.mockResolvedValue(null);
+            expect(async () => await service.remove('')).rejects.toThrow();
+        });
     });
     describe('When calling service.updateGrade', () => {
+        test('And route does not found, then it should throw error', async () => {
+            mockRouteModel.findById.mockResolvedValue(null);
+            mockUserModel.findById.mockResolvedValue(mockUser);
+            expect(async () => {
+                await service.updateGrade('', '', '8');
+            }).rejects.toThrow();
+        });
         test('And the route is voted yet, then should update grade ', async () => {
             mockUserModel.findById.mockResolvedValue(mockUser);
             mockRouteModel.findById.mockResolvedValueOnce({
                 ...mockRoute,
                 save: jest.fn(),
             });
-            const result = await service.updateGrade('', '', 8);
+            const result = await service.updateGrade('', '', '8');
             expect(result).toEqual({ user: '', vote: 8 });
         });
         test('And user does not found, then it should throw error', async () => {
             mockRouteModel.findById.mockResolvedValue(mockRoute);
             mockUserModel.findById.mockResolvedValue(null);
             expect(async () => {
-                await service.updateGrade('', '', 8);
+                await service.updateGrade('', '', '8');
             }).rejects.toThrow();
         });
-        test('And route does not found, then it should thorw error', async () => {
-            mockRouteModel.findById.mockResolvedValue(null);
+        test('And vote is a number, then throw an exception', () => {
             mockUserModel.findById.mockResolvedValue(mockUser);
-            expect(async () => {
-                await service.updateGrade('', '', 8);
-            }).rejects.toThrow();
+            mockRouteModel.findById.mockResolvedValueOnce({
+                ...mockRoute,
+                save: jest.fn(),
+            });
+            expect(
+                async () => await service.updateGrade('', '', 'pecera'),
+            ).rejects.toThrow();
         });
+
         test('And the route is voted by the user, then should throw error', async () => {
             mockRouteModel.findById.mockResolvedValue(mockRoute);
             mockUserModel.findById.mockResolvedValue(mockUser);
             expect(async () => {
-                await service.updateGrade('', '', 8);
+                await service.updateGrade('', '', '8');
             }).rejects.toThrow();
         });
     });

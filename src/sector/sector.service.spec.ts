@@ -89,20 +89,32 @@ describe('SectorService', () => {
             const result = await service.findOne('');
             expect(result).toEqual(mockSector);
         });
+        test('And id is not valid, then shoud throw an exception', async () => {
+            mockSectorModel.findById.mockReturnValueOnce(null);
+            expect(async () => await service.findOne('')).rejects.toThrow();
+        });
     });
     describe('When calling service.findByIdAndUpdate', () => {
         test('Then it should return updated sector', async () => {
             const result = await service.update('', mockSector);
             expect(result).toEqual(mockSector);
         });
+        test('And id is not valid, then shoud throw an exception ', async () => {
+            mockSectorModel.findByIdAndUpdate.mockResolvedValueOnce(null);
+            expect(
+                async () => await service.update('', mockSector),
+            ).rejects.toThrow();
+        });
     });
     describe('When calling service.remove', () => {
         test('Then it should return remove sector', async () => {
-            mockSectorModel.findById.mockResolvedValueOnce({
-                delete: jest.fn().mockResolvedValue(mockSector),
-            });
+            mockSectorModel.findByIdAndDelete.mockResolvedValue(mockSector);
             const result = await service.remove('');
             expect(result).toEqual(mockSector);
+        });
+        test('And id is not valid, then shoud throw an exception ', async () => {
+            mockSectorModel.findByIdAndDelete.mockResolvedValueOnce(null);
+            expect(async () => await service.remove('')).rejects.toThrow();
         });
     });
 });

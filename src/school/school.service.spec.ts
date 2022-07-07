@@ -1,5 +1,6 @@
 import { getModelToken, MongooseModule } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
+import { rejects } from 'assert';
 import { sectorSchema } from '../sector/entities/sector.entity';
 import { CreateSchoolDto } from './dto/create-school.dto';
 import { schoolSchema } from './entities/school.entity';
@@ -21,7 +22,7 @@ describe('SchoolService', () => {
         create: jest.fn().mockResolvedValue(mockSchool),
         find: jest.fn().mockResolvedValue(mockSchool),
         findById: jest.fn().mockResolvedValue(mockSchool),
-        findByIdAndUpdate: jest.fn().mockResolvedValue(mockSchool),
+        findByIdAndUpdate: jest.fn(),
         findByIdAndDelete: jest.fn().mockResolvedValue(mockSchool),
     };
 
@@ -82,23 +83,38 @@ describe('SchoolService', () => {
             mockSchoolModel.findById.mockReturnValueOnce({
                 populate: jest.fn().mockResolvedValue(mockSchool),
             });
-            const result = await service.findOne('');
+            const result = await service.findOne('123456789012345678901234');
             expect(result).toEqual(mockSchool);
+        });
+        test('And id is not valid, then should throw an exception', async () => {
+            mockSchoolModel.findById.mockReturnValueOnce(null);
+            expect(
+                async () => await service.findOne('123456789012345678901234'),
+            ).rejects.toThrow();
         });
     });
     describe('When calling service.findByIdAndUpdate', () => {
         test('Then it should return updated route', async () => {
+            mockSchoolModel.findByIdAndUpdate.mockResolvedValue(mockSchool);
             const result = await service.update('', mockSchool);
             expect(result).toEqual(mockSchool);
+        });
+        test('And id is not valid, then should throw an exception', async () => {
+            mockSchoolModel.findByIdAndUpdate.mockResolvedValueOnce(null);
+            expect(
+                async () => await service.update('', mockSchool),
+            ).rejects.toThrow();
         });
     });
     describe('When calling service.remove', () => {
         test('Then it should return remove school', async () => {
-            mockSchoolModel.findById.mockResolvedValueOnce({
-                delete: jest.fn().mockResolvedValue(mockSchool),
-            });
+            mockSchoolModel.findByIdAndDelete.mockResolvedValue(mockSchool);
             const result = await service.remove('');
             expect(result).toEqual(mockSchool);
+        });
+        test('And id is not valid, then should throw an exception', async () => {
+            mockSchoolModel.findByIdAndDelete.mockResolvedValueOnce(null);
+            expect(async () => await service.remove('')).rejects.toThrow();
         });
     });
 });
