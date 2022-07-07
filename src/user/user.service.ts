@@ -38,7 +38,7 @@ export class UserService {
         });
         if (user === null) throw new NotFoundException('User does not exist.');
         if (!this.bcrypt.compare(loginData.psw, user.psw))
-            throw new UnauthorizedException('Password or email iconrrect.');
+            throw new UnauthorizedException('Password or email incorrect.');
         const token = this.auth.createToken(user.id);
         return {
             user,
@@ -50,8 +50,9 @@ export class UserService {
         const tokenData = this.auth.decodedToken(
             token.substring(7),
         ) as JwtPayload;
-        if (typeof tokenData === 'string') throw new UnauthorizedException('');
-        const user = await await this.User.findById(tokenData.id); //no sé si tendré que popular algo porque no sé si este método me sirve para algo
+        if (typeof tokenData === 'string')
+            throw new UnauthorizedException('Invalid token');
+        const user = await this.User.findById(tokenData.id);
         if (user === null) throw new NotFoundException('User does not exist');
         const newToken = this.auth.createToken(user.id);
         return {
@@ -90,5 +91,17 @@ export class UserService {
     async remove(id: string) {
         const deleteUser = await this.User.findByIdAndDelete(id);
         return deleteUser;
+    }
+
+    async removeProfile(token: string) {
+        const tokenData = this.auth.decodedToken(
+            token.substring(7),
+        ) as JwtPayload;
+        if (typeof tokenData === 'string')
+            throw new UnauthorizedException('Invalid token');
+        const user = await this.User.findById(tokenData.id);
+        if (user === null) throw new NotFoundException('User does not exist');
+        const deleteProfile = this.User.findByIdAndDelete(tokenData.id);
+        return deleteProfile;
     }
 }
