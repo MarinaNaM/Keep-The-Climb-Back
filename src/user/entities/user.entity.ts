@@ -1,9 +1,7 @@
+/* istanbul ignore file */
 import { Schema, SchemaTypes, Types } from 'mongoose';
+import { isEmail } from '../../helpers/is.email';
 
-export const isEmail = (email: string) => {
-    const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    return regex.test(email);
-};
 export interface iUser {
     _id?: Types.ObjectId;
     name: string;
@@ -40,7 +38,7 @@ export const userSchema = new Schema({
     email: {
         type: String,
         required: [true, 'El email es obligatorio'],
-        validate: [isEmail, 'Provider email is not valid'],
+        validate: [isEmail, 'El email no es válido'],
         unique: [true, 'Este email ya está registrado'],
     },
     address: {
@@ -60,4 +58,11 @@ export const userSchema = new Schema({
             isEnchain: { type: Boolean, default: false },
         },
     ],
+});
+
+userSchema.set('toJSON', {
+    transform: (document, returnedObject) => {
+        delete returnedObject.__v;
+        delete returnedObject.psw;
+    },
 });
