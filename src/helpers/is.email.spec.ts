@@ -1,4 +1,4 @@
-import { isEmail } from './user.entity';
+import { isEmail } from './is.email';
 
 describe('Given isEmail function', () => {
     describe('When calling it to the validate email', () => {

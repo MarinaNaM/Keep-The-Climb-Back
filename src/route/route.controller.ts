@@ -37,6 +37,7 @@ export class RouteController {
     ) {
         return this.routeService.updateGrade(body.user, id, body.vote);
     }
+
     @Patch(':id')
     update(@Param('id') id: string, @Body() updateRouteDto: UpdateRouteDto) {
         return this.routeService.update(id, updateRouteDto);

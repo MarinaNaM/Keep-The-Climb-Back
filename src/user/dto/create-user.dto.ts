@@ -7,5 +7,6 @@ export class CreateUserDto {
         community?: string;
         province?: string;
     };
+    role: 'admin' | 'user';
     routes: [{ route: string; isProject: boolean; isEnchain: boolean }];
 }

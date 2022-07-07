@@ -20,6 +20,7 @@ describe('UserController', () => {
                         remove: jest.fn(),
                         loginWithToken: jest.fn(),
                         login: jest.fn(),
+                        removeProfile: jest.fn(),
                     },
                 },
             ],
@@ -40,6 +41,7 @@ describe('UserController', () => {
                 psw: '1234',
                 img: 'src',
                 email: 'user@test.com',
+                role: 'admin',
                 address: {
                     community: 'Comunidad',
                     province: 'Povincia',
@@ -85,6 +87,12 @@ describe('UserController', () => {
         test('Then service.remove should be called', () => {
             controller.remove('');
             expect(service.remove).toHaveBeenCalled();
+        });
+    });
+    describe('When calling controller.removeProfile', () => {
+        test('Then service.removeProfile should be called', () => {
+            controller.removeProfile('');
+            expect(service.removeProfile).toHaveBeenCalled();
         });
     });
 });
