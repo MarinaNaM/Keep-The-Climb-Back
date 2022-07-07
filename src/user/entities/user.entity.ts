@@ -19,16 +19,13 @@ export interface iUser {
 export const userSchema = new Schema({
     name: {
         type: String,
-        required: [true, 'El nombre es obligatorio'],
-        unique: [true, 'Este nombre ya existe'],
+        required: [true, 'Name is required'],
+        unique: [true, 'This name already exists in database'],
     },
     psw: {
         type: String,
-        required: [true, 'La contraseña es obligatoria'],
-        minLength: [
-            8,
-            'La longitud de la contraseña debe ser superior a 8 dígitos',
-        ],
+        required: [true, 'Password is required'],
+        minLength: [8, 'Password length must be longer than 8 digits '],
     },
     img: {
         type: String,
@@ -37,9 +34,9 @@ export const userSchema = new Schema({
     },
     email: {
         type: String,
-        required: [true, 'El email es obligatorio'],
-        validate: [isEmail, 'El email no es válido'],
-        unique: [true, 'Este email ya está registrado'],
+        required: [true, 'Email is required'],
+        validate: [isEmail, 'This email is not valid'],
+        unique: [true, 'This email already exists'],
     },
     address: {
         community: String,
@@ -48,7 +45,7 @@ export const userSchema = new Schema({
     role: {
         type: String,
         enum: ['admin', 'user'],
-        required: [true, 'El rol es obligatorio'],
+        required: [true, 'Role is required'],
         default: 'user',
     },
     routes: [

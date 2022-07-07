@@ -70,7 +70,9 @@ export class UserService {
                 path: 'route',
             },
         };
-        const user = await this.User.findById(id).populate(populate);
+        const findUser = await this.User.findById(id);
+        if (!findUser) throw new NotFoundException('User not found');
+        const user = findUser.populate(populate);
         return user;
     }
 
@@ -85,12 +87,16 @@ export class UserService {
                 new: true,
             },
         );
+        if (!updateUser) throw new NotFoundException('User not found');
+
         return updateUser;
     }
 
     async remove(id: string) {
-        const deleteUser = await this.User.findByIdAndDelete(id);
-        return deleteUser;
+        const result = await this.User.findByIdAndDelete(id);
+        if (!result) throw new NotFoundException('User not found');
+
+        return result;
     }
 
     async removeProfile(token: string) {

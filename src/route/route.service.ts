@@ -1,6 +1,7 @@
 import {
     ForbiddenException,
     Injectable,
+    NotAcceptableException,
     NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -29,30 +30,35 @@ export class RouteService {
 
     async findOne(id: string) {
         const result = await this.Route.findById(id);
+        if (!result) throw new NotFoundException('Route not found');
         return result;
     }
 
     async update(id: string, updateRouteDto: UpdateRouteDto) {
-        return await this.Route.findByIdAndUpdate(id, updateRouteDto, {
+        const result = await this.Route.findByIdAndUpdate(id, updateRouteDto, {
             new: true,
         });
+        if (!result) throw new NotFoundException('Route not found');
+        return result;
     }
 
     async remove(id: string) {
-        const route = await this.Route.findById(id);
-        const deleteRoute = await route.delete();
-        return deleteRoute;
+        const result = await this.Route.findByIdAndDelete(id);
+        if (!result) throw new NotFoundException('Route not found');
+        return result;
     }
 
-    async updateGrade(idUser: string, idRoute: string, voteGrade: number) {
+    async updateGrade(idUser: string, idRoute: string, voteGrade: string) {
+        const voteGradeNumber = Number(voteGrade);
+        if (Number.isNaN(voteGradeNumber))
+            throw new NotAcceptableException('voteGrade has to be a number');
         const route = await this.Route.findById(idRoute);
         if (!route) throw new NotFoundException('Route not found');
 
         const findUser = await this.User.findById(idUser);
-        if (!findUser)
-            throw new NotFoundException('El usuario no ha sido encontrado');
+        if (!findUser) throw new NotFoundException('User does not found');
 
-        const newVote = { user: idUser, vote: voteGrade };
+        const newVote = { user: idUser, vote: voteGradeNumber };
         const voted = route.voteGrade.some(
             (item) => item.user.toString() === idUser,
         );

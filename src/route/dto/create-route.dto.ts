@@ -5,7 +5,7 @@ export class CreateRouteDto {
     voteGrade: [
         {
             user: string;
-            vote: number;
+            vote: string;
         },
     ];
 }

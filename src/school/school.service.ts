@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateSchoolDto } from './dto/create-school.dto';
@@ -32,19 +32,27 @@ export class SchoolService {
                 path: 'routes',
             },
         };
-        const result = await this.School.findById(id).populate(populate);
-        return result;
+        const findSchool = await this.School.findById(id);
+        if (!findSchool) throw new NotFoundException('School not found');
+        const school = findSchool.populate(populate);
+        return school;
     }
 
     async update(id: string, updateSchoolDto: UpdateSchoolDto) {
-        return this.School.findByIdAndUpdate(id, updateSchoolDto, {
-            new: true,
-        });
+        const result = await this.School.findByIdAndUpdate(
+            id,
+            updateSchoolDto,
+            {
+                new: true,
+            },
+        );
+        if (!result) throw new NotFoundException('School not found');
+        return result;
     }
 
     async remove(id: string) {
-        const school = await this.School.findById(id);
-        const deleteSchool = await school.delete();
-        return deleteSchool;
+        const result = await this.School.findByIdAndDelete(id);
+        if (!result) throw new NotFoundException('School not found');
+        return result;
     }
 }

@@ -30,7 +30,7 @@ describe('UserService', () => {
     const mockUserModel = {
         create: jest.fn().mockResolvedValue(mockUser),
         find: jest.fn().mockResolvedValue(mockUser),
-        findById: jest.fn().mockResolvedValue(mockUser),
+        findById: jest.fn(),
         findByIdAndUpdate: jest.fn().mockResolvedValue(mockUser),
         findByIdAndDelete: jest.fn().mockResolvedValue(mockUser),
         findOne: jest.fn().mockResolvedValue(mockUser),
@@ -153,6 +153,7 @@ describe('UserService', () => {
 
     describe('When calling service.loginWithToken with a valid token', () => {
         test('Then it should return the user data and token', async () => {
+            mockUserModel.findById.mockResolvedValueOnce(mockUser);
             const result = await service.loginWithToken('token');
             expect(result).toEqual(mockResponse);
         });
@@ -183,30 +184,6 @@ describe('UserService', () => {
             expect(result).toEqual(mockUser);
         });
     });
-    describe('When calling service.findById', () => {
-        test('Then it should return one user', async () => {
-            mockUserModel.findById.mockReturnValueOnce({
-                populate: jest.fn().mockResolvedValue(mockUser),
-            });
-            const result = await service.findOne('');
-            expect(result).toEqual(mockUser);
-        });
-    });
-    describe('When calling service.findByIdAndUpdate', () => {
-        test('Then it should return updated user', async () => {
-            const result = await service.update('', mockUser);
-            expect(result).toEqual(mockUser);
-        });
-    });
-    describe('When calling service.remove', () => {
-        test('Then it should return remove user', async () => {
-            mockUserModel.findById.mockResolvedValueOnce({
-                delete: jest.fn().mockResolvedValue(mockUser),
-            });
-            const result = await service.remove('');
-            expect(result).toEqual(mockUser);
-        });
-    });
     describe('When calling service.removeProfile', () => {
         test('Then it should return remove user profile', async () => {
             mockUserModel.findById.mockResolvedValueOnce({
@@ -222,6 +199,42 @@ describe('UserService', () => {
             expect(async () => {
                 await service.removeProfile('token');
             }).rejects.toThrow();
+        });
+    });
+    describe('When calling service.findById', () => {
+        test('Then it should return one user', async () => {
+            mockUserModel.findById.mockReturnValueOnce({
+                populate: jest.fn().mockResolvedValue(mockUser),
+            });
+            const result = await service.findOne('');
+            expect(result).toEqual(mockUser);
+        });
+        test('And id is not valid, then should throw an exception', async () => {
+            mockUserModel.findById.mockResolvedValueOnce(null);
+            expect(async () => await service.findOne('')).rejects.toThrow();
+        });
+    });
+    describe('When calling service.findByIdAndUpdate', () => {
+        test('Then it should return updated user', async () => {
+            const result = await service.update('', mockUser);
+            expect(result).toEqual(mockUser);
+        });
+        test('And id is not valid, then should throw an exception', async () => {
+            mockUserModel.findByIdAndUpdate.mockResolvedValueOnce(null);
+            expect(
+                async () => await service.update('', mockUser),
+            ).rejects.toThrow();
+        });
+    });
+    describe('When calling service.remove', () => {
+        test('Then it should return remove user', async () => {
+            mockUserModel.findByIdAndDelete.mockResolvedValue(mockUser);
+            const result = await service.remove('');
+            expect(result).toEqual(mockUser);
+        });
+        test('And id is not valid, then should throw an exception', async () => {
+            mockUserModel.findByIdAndDelete.mockResolvedValue(null);
+            expect(async () => await service.remove('')).rejects.toThrow();
         });
     });
 });
