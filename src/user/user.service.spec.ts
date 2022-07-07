@@ -17,6 +17,7 @@ describe('UserService', () => {
             community: 'Comunidad',
             province: 'Provincia',
         },
+        role: 'admin',
         routes: [
             {
                 route: '123456789012345678901234',

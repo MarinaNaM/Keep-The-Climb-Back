@@ -40,6 +40,7 @@ describe('UserController', () => {
                 psw: '1234',
                 img: 'src',
                 email: 'user@test.com',
+                role: 'admin',
                 address: {
                     community: 'Comunidad',
                     province: 'Povincia',
