@@ -55,4 +55,9 @@ export class UserController {
     async remove(@Param('id') id: string) {
         return await this.userService.remove(id);
     }
+
+    @Delete()
+    async removeProfile(@Headers('Authorization') token: string) {
+        return await this.userService.removeProfile(token);
+    }
 }
