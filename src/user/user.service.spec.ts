@@ -198,4 +198,14 @@ describe('UserService', () => {
             expect(result).toEqual(mockUser);
         });
     });
+    describe('When calling service.removeProfile', () => {
+        test('Then it should return remove user profile', async () => {
+            await service.loginWithToken('token');
+            mockUserModel.findById.mockResolvedValueOnce({
+                delete: jest.fn().mockResolvedValue(mockUser),
+            });
+            const result = await service.removeProfile('');
+            expect(result).toEqual(mockUser);
+        });
+    });
 });
