@@ -115,6 +115,12 @@ describe('UserService', () => {
             const result = await service.create(mockUser);
             expect(result).toEqual(mockResponse);
         });
+        test('And is not valid data, then throw an exception', async () => {
+            mockUserModel.create.mockRejectedValueOnce(null);
+            expect(
+                async () => await service.create(mockUser),
+            ).rejects.toThrow();
+        });
     });
 
     describe('When calling service.login with valid login info', () => {
