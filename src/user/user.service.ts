@@ -1,4 +1,5 @@
 import {
+    BadRequestException,
     Injectable,
     NotFoundException,
     UnauthorizedException,
@@ -20,15 +21,19 @@ export class UserService {
     ) {}
 
     async create(createUserDto: CreateUserDto) {
-        const newUser = await this.User.create({
-            ...createUserDto,
-            psw: this.bcrypt.encrypt(createUserDto.psw),
-        });
-        const token = this.auth.createToken(newUser.id);
-        return {
-            user: newUser,
-            token,
-        };
+        try {
+            const newUser = await this.User.create({
+                ...createUserDto,
+                psw: this.bcrypt.encrypt(createUserDto.psw),
+            });
+            const token = this.auth.createToken(newUser.id);
+            return {
+                user: newUser,
+                token,
+            };
+        } catch (error) {
+            throw new BadRequestException('User can not be created');
+        }
     }
 
     async login(loginData: { email: string; psw: string }) {

@@ -5,7 +5,7 @@ import { RouteService } from './route.service';
 import { RouteController } from './route.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { routeSchema } from './entities/route.entity';
-import { userSchema } from 'src/user/entities/user.entity';
+import { userSchema } from '../user/entities/user.entity';
 
 @Module({
     imports: [

@@ -45,7 +45,6 @@ export const userSchema = new Schema({
     role: {
         type: String,
         enum: ['admin', 'user'],
-        required: [true, 'Role is required'],
         default: 'user',
     },
     routes: [
@@ -61,5 +60,6 @@ userSchema.set('toJSON', {
     transform: (document, returnedObject) => {
         delete returnedObject.__v;
         delete returnedObject.psw;
+        delete returnedObject.role;
     },
 });
