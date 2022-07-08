@@ -10,18 +10,25 @@ import { RouteModule } from './route/route.module';
 import { UserModule } from './user/user.module';
 import { AuthMiddleware } from './middlewares/auth.middleware';
 import { RoleMiddleware } from './middlewares/role.middleware';
+import { AuthService } from './auth/auth.service';
+import { userSchema } from './user/entities/user.entity';
 
 @Module({
     imports: [
         ConfigModule.forRoot(),
-        MongooseModule.forRoot(process.env.URL_MONGO),
+        MongooseModule.forRoot(
+            process.env.NODE_ENV === 'test'
+                ? process.env.URL_MONGO_TEST
+                : process.env.URL_MONGO,
+        ),
         SchoolModule,
         SectorModule,
         RouteModule,
         UserModule,
+        MongooseModule.forFeature([{ name: 'User', schema: userSchema }]),
     ],
     controllers: [AppController],
-    providers: [AppService],
+    providers: [AppService, AuthService],
 })
 export class AppModule {
     configure(consumer: MiddlewareConsumer) {
@@ -36,7 +43,8 @@ export class AppModule {
                 { path: 'user', method: RequestMethod.POST },
                 { path: 'user/login', method: RequestMethod.POST },
             )
-            .forRoutes('*')
+            .forRoutes('*');
+        consumer
             .apply(RoleMiddleware) //Aquí puedes entrar sin ser admin
             .exclude(
                 { path: 'route', method: RequestMethod.GET },
