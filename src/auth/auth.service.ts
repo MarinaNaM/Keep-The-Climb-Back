@@ -4,7 +4,9 @@ import * as jwt from 'jsonwebtoken';
 export class AuthService {
     createToken(id: string) {
         const secret = process.env.SECRET;
-        return jwt.sign(id, secret);
+        const result = jwt.sign({ id }, secret);
+
+        return result;
     }
     decodedToken(token: string) {
         const secret = process.env.SECRET;
