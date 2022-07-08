@@ -32,7 +32,7 @@ export class UserService {
                 token,
             };
         } catch (error) {
-            throw new BadRequestException('User can not be create');
+            throw new BadRequestException('User can not be created');
         }
     }
 
