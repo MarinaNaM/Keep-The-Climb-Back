@@ -15,7 +15,7 @@ export interface iRoute {
 
 export const routeSchema = new Schema({
     name: String,
-    lenght: Number,
+    length: Number,
     grade: String,
     voteGrade: [
         {

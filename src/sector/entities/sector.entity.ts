@@ -5,7 +5,7 @@ export interface iSector {
     _id?: Types.ObjectId;
     name: string;
     img: string;
-    hoursSun: string;
+    hoursSun: 'mañana' | 'tarde' | 'todo' | 'sombra';
     localization: {
         lat: number;
         lng: number;
@@ -16,7 +16,7 @@ export interface iSector {
 export const sectorSchema = new Schema({
     name: String,
     img: String,
-    hoursSun: String,
+    hoursSun: { type: String, enum: ['mañana', 'tarde', 'todo', 'sombra'] },
     localization: {
         lat: Number,
         lng: Number,

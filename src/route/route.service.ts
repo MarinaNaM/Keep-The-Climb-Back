@@ -20,6 +20,7 @@ export class RouteService {
 
     async create(createRouteDto: CreateRouteDto) {
         const newRoute = await this.Route.create(createRouteDto);
+
         return newRoute;
     }
 

@@ -1,6 +1,5 @@
 import { getModelToken, MongooseModule } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
-import { rejects } from 'assert';
 import { sectorSchema } from '../sector/entities/sector.entity';
 import { CreateSchoolDto } from './dto/create-school.dto';
 import { schoolSchema } from './entities/school.entity';
@@ -28,7 +27,7 @@ describe('SchoolService', () => {
 
     const mockSector = {
         name: 'Test-Sector',
-        hoursSun: 'Mañana',
+        hoursSun: 'mañana',
     };
 
     const mockSectorModel = {
