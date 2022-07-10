@@ -35,7 +35,7 @@ describe('SectorController', () => {
             controller.create({
                 name: 'test',
                 img: 'src',
-                hoursSun: 'todo el año',
+                hoursSun: 'mañana',
                 localization: {
                     lat: 1234,
                     lng: 1234,
