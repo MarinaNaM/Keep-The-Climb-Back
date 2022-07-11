@@ -22,19 +22,15 @@ export class SchoolService {
     }
 
     async findOne(id: string) {
-        const populate = {
-            path: 'sectors',
-            select: {
-                name: 1,
-                hoursSun: 1,
-            },
-            populate: {
-                path: 'routes',
-            },
-        };
         const findSchool = await this.School.findById(id);
         if (!findSchool) throw new NotFoundException('School not found');
-        const school = findSchool.populate(populate);
+        const school = findSchool.populate({
+            path: 'sectors',
+            populate: {
+                select: 'name length grade voteGrade',
+                path: 'routes',
+            },
+        });
         return school;
     }
 
