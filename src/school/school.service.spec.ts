@@ -72,7 +72,9 @@ describe('SchoolService', () => {
     });
     describe('When calling service.find', () => {
         test('Then it should return all schools', async () => {
-            mockSchoolModel.find.mockResolvedValue(mockSchool);
+            mockSchoolModel.find.mockReturnValueOnce({
+                populate: jest.fn().mockResolvedValue(mockSchool),
+            });
             const result = await service.findAll();
             expect(result).toEqual(mockSchool);
         });

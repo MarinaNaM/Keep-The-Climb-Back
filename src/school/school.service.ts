@@ -17,7 +17,13 @@ export class SchoolService {
     }
 
     async findAll() {
-        const result = await this.School.find();
+        const result = await this.School.find().populate({
+            path: 'sectors',
+            populate: {
+                select: 'name length grade voteGrade',
+                path: 'routes',
+            },
+        });
         return result;
     }
 
