@@ -76,7 +76,9 @@ describe('SectorService', () => {
     });
     describe('When calling service.find', () => {
         test('Then it should return all sectors', async () => {
-            mockSectorModel.find.mockResolvedValue(mockSector);
+            mockSectorModel.find.mockReturnValueOnce({
+                populate: jest.fn().mockResolvedValue(mockSector),
+            });
             const result = await service.findAll();
             expect(result).toEqual(mockSector);
         });
