@@ -17,7 +17,7 @@ export class SectorService {
     }
 
     async findAll() {
-        const result = await this.Sector.find();
+        const result = await this.Sector.find().populate('routes');
         return result;
     }
 
