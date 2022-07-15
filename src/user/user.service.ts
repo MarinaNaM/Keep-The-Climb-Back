@@ -39,7 +39,7 @@ export class UserService {
     async login(loginData: { email: string; psw: string }) {
         const user = await this.User.findOne({
             email: loginData.email,
-        });
+        }).populate({ path: 'routes', populate: { path: 'route' } });
         if (user === null) throw new NotFoundException('User does not exist.');
         if (!this.bcrypt.compare(loginData.psw, user.psw))
             throw new UnauthorizedException('Password or email incorrect.');
@@ -54,7 +54,10 @@ export class UserService {
         const tokenData = this.auth.decodedToken(token.substring(7));
         if (typeof tokenData === 'string')
             throw new UnauthorizedException('Invalid token');
-        const user = await this.User.findById(tokenData.id);
+        const user = await this.User.findById(tokenData.id).populate({
+            path: 'routes',
+            populate: { path: 'route' },
+        });
         if (user === null) throw new NotFoundException('User does not exist');
         const newToken = this.auth.createToken(user.id);
         return {
@@ -65,19 +68,14 @@ export class UserService {
 
     async findAll() {
         const users = await this.User.find();
+
         return users;
     }
 
     async findOne(id: string) {
-        const populate = {
-            path: 'routes',
-            populate: {
-                path: 'route',
-            },
-        };
         const findUser = await this.User.findById(id);
         if (!findUser) throw new NotFoundException('User not found');
-        const user = findUser.populate(populate);
+        const user = findUser;
         return user;
     }
 
