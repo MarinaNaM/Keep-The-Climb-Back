@@ -89,7 +89,7 @@ export class UserService {
             {
                 new: true,
             },
-        );
+        ).populate({ path: 'routes', populate: { path: 'route' } });
         if (!updateUser) throw new NotFoundException('User not found');
 
         return updateUser;
