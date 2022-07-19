@@ -1,15 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import * as jwt from 'jsonwebtoken';
+import { sign, verify } from 'jsonwebtoken';
 @Injectable()
 export class AuthService {
     createToken(id: string) {
         const secret = process.env.SECRET;
-        const result = jwt.sign({ id }, secret);
+        const result = sign({ id }, secret);
 
         return result;
     }
     decodedToken(token: string) {
+        console.log(token);
         const secret = process.env.SECRET;
-        return jwt.verify(token, secret);
+        console.log(secret);
+        const result = verify(token, secret);
+        return result;
     }
 }
