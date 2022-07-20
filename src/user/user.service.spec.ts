@@ -225,6 +225,9 @@ describe('UserService', () => {
     });
     describe('When calling service.findByIdAndUpdate', () => {
         test('Then it should return updated user', async () => {
+            mockUserModel.findByIdAndUpdate.mockReturnValueOnce({
+                populate: jest.fn().mockResolvedValue(mockUser),
+            });
             const result = await service.update('', mockUser);
             expect(result).toEqual(mockUser);
         });
