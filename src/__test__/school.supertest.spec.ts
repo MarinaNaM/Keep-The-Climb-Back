@@ -4,7 +4,6 @@ import * as request from 'supertest';
 import { AppModule } from '../app.module';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { CreateSchoolDto } from '../school/dto/create-school.dto';
-import { userSchema } from 'src/user/entities/user.entity';
 
 describe('SchoolController (e2e)', () => {
     let app: INestApplication;
