@@ -56,7 +56,6 @@ describe('SchoolController (e2e)', () => {
             .send(mockUser1)
             .set('Accept', 'application/json');
         user1Token = response.body.token;
-        console.log(response.body, 'tokennn test');
     });
 
     afterAll(async () => {
