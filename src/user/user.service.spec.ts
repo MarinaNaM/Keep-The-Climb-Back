@@ -138,7 +138,9 @@ describe('UserService', () => {
 
     describe('When calling service.login with invalid email', () => {
         test('Then it should throw an unauthorized exception', async () => {
-            mockUserModel.findOne.mockResolvedValueOnce(null);
+            mockUserModel.findOne.mockReturnValueOnce({
+                populate: jest.fn().mockResolvedValue(null),
+            });
             expect(async () => {
                 await service.login({
                     email: mockUser.email,
@@ -150,6 +152,9 @@ describe('UserService', () => {
 
     describe('When calling service.login with invalid password', () => {
         test('Then it should throw an unauthorized exception', async () => {
+            mockUserModel.findOne.mockReturnValueOnce({
+                populate: jest.fn().mockResolvedValue(mockUser),
+            });
             mockBcrypt.compare.mockReturnValueOnce(false);
             expect(async () => {
                 await service.login({
@@ -181,7 +186,9 @@ describe('UserService', () => {
 
     describe('When calling service.loginWithToken with a valid token but user does not exist', () => {
         test('Then it should throw an unauthorized exception', async () => {
-            mockUserModel.findById.mockResolvedValueOnce(null);
+            mockUserModel.findById.mockReturnValueOnce({
+                populate: jest.fn().mockResolvedValue(null),
+            });
             expect(async () => {
                 await service.loginWithToken('token');
             }).rejects.toThrow();
@@ -232,7 +239,9 @@ describe('UserService', () => {
             expect(result).toEqual(mockUser);
         });
         test('And id is not valid, then should throw an exception', async () => {
-            mockUserModel.findByIdAndUpdate.mockResolvedValueOnce(null);
+            mockUserModel.findByIdAndUpdate.mockReturnValueOnce({
+                populate: jest.fn().mockResolvedValue(null),
+            });
             expect(
                 async () => await service.update('', mockUser),
             ).rejects.toThrow();
