@@ -9,9 +9,7 @@ export class AuthService {
         return result;
     }
     decodedToken(token: string) {
-        console.log(token);
         const secret = process.env.SECRET;
-        console.log(secret);
         const result = verify(token, secret);
         return result;
     }
