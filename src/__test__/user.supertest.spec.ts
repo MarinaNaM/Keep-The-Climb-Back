@@ -117,13 +117,6 @@ describe('UserController (e2e)', () => {
         expect(response.status).toBe(200);
         expect(response.body.name).toBe('updated test');
     });
-    // este test funciona pero está comentado porque si no , no puedo probar que el admin borre
-    // test('/user (DELETE)', async () => {
-    //     const response = await request(app.getHttpServer())
-    //         .delete('/user')
-    //         .set('Authorization', 'bearer ' + user1Token);
-    //     expect(response.status).toBe(200);
-    // });
     test('/user (DELETE)', async () => {
         const response = await request(app.getHttpServer())
             .delete('/user')
